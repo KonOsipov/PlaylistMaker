@@ -10,4 +10,6 @@
     <dimen name="main_button_text_size">22sp</dimen>
     <dimen name="main_button_cornerRadius">20dp</dimen>
     <dimen name="main_button_iconPadding">10dp</dimen>
+    <dimen name="main_button_paddingVertical">21dp</dimen>
+    <dimen name="main_button_paddingEnd">12dp</dimen>
 </resources>

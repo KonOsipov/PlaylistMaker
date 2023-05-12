@@ -47,56 +47,38 @@
         android:textColor="@color/black"
         android:textSize="@dimen/settings_text_size" />
 
-    <Button
-
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_button_height"
-        android:backgroundTint="@color/white"
-        android:letterSpacing="0"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/main_button_paddingVertical"
         android:paddingStart="@dimen/settings_padding_start"
-        android:paddingEnd="16dp"
+        android:paddingEnd="@dimen/main_button_paddingEnd"
         android:text="@string/share"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="@dimen/settings_text_size"
-        app:icon="@drawable/share"
-        app:iconGravity="end"
-        app:iconTint="@color/gray" />
+        app:drawableEndCompat="@drawable/share" />
 
-    <Button
-
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_button_height"
-        android:backgroundTint="@color/white"
-        android:letterSpacing="0"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/main_button_paddingVertical"
         android:paddingStart="@dimen/settings_padding_start"
-        android:paddingEnd="14dp"
+        android:paddingEnd="@dimen/main_button_paddingEnd"
         android:text="@string/support"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="@dimen/settings_text_size"
-        app:icon="@drawable/support"
-        app:iconGravity="end"
-        app:iconTint="@color/gray" />
+        app:drawableEndCompat="@drawable/support" />
 
-    <Button
-
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_button_height"
-        android:backgroundTint="@color/white"
-        android:letterSpacing="0"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/main_button_paddingVertical"
         android:paddingStart="@dimen/settings_padding_start"
-        android:paddingEnd="20dp"
+        android:paddingEnd="@dimen/main_button_paddingEnd"
         android:text="@string/agreement"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="@dimen/settings_text_size"
-        app:icon="@drawable/license"
-        app:iconGravity="end"
-        app:iconTint="@color/gray" />
+        app:drawableEndCompat="@drawable/license" />
 
 </LinearLayout>
 
