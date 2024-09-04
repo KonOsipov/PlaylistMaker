@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/settings_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/corner_margin"
+            android:layout_marginTop="@dimen/corner_margin"
+            android:src="@drawable/arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="@dimen/margin_title_top"
+            android:text="@string/settings"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+    </LinearLayout>
+
+    <Switch
+
+
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_button_height"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="@color/white"
+        android:letterSpacing="0"
+        android:paddingStart="@dimen/settings_padding_start"
+        android:paddingEnd="5dp"
+        android:text="@string/dark_theme"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="@dimen/settings_text_size" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/main_button_paddingVertical"
+        android:paddingStart="@dimen/settings_padding_start"
+        android:paddingEnd="@dimen/main_button_paddingEnd"
+        android:text="@string/share"
+        android:textColor="@color/black"
+        android:textSize="@dimen/settings_text_size"
+        app:drawableEndCompat="@drawable/share" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/main_button_paddingVertical"
+        android:paddingStart="@dimen/settings_padding_start"
+        android:paddingEnd="@dimen/main_button_paddingEnd"
+        android:text="@string/support"
+        android:textColor="@color/black"
+        android:textSize="@dimen/settings_text_size"
+        app:drawableEndCompat="@drawable/support" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/main_button_paddingVertical"
+        android:paddingStart="@dimen/settings_padding_start"
+        android:paddingEnd="@dimen/main_button_paddingEnd"
+        android:text="@string/agreement"
+        android:textColor="@color/black"
+        android:textSize="@dimen/settings_text_size"
+        app:drawableEndCompat="@drawable/license" />
+
+</LinearLayout>
+

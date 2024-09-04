@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="corner_margin">20dp</dimen>
+    <dimen name="margin_title_top">14dp</dimen>
+    <dimen name="settings_button_height">61dp</dimen>
+    <dimen name="settings_padding_start">16dp</dimen>
+    <dimen name="settings_text_size">16sp</dimen>
+    <dimen name="main_button_layout_height">0dp</dimen>
+    <dimen name="main_button_layout_weight">3</dimen>
+    <dimen name="main_button_text_size">22sp</dimen>
+    <dimen name="main_button_cornerRadius">20dp</dimen>
+    <dimen name="main_button_iconPadding">10dp</dimen>
+    <dimen name="main_button_paddingVertical">21dp</dimen>
+    <dimen name="main_button_paddingEnd">12dp</dimen>
+</resources>
