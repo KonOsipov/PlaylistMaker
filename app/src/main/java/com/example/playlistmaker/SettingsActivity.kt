@@ -17,7 +17,6 @@ class SettingsActivity : AppCompatActivity() {
 
         settingsBackButton.setOnClickListener {
             finish()
-            //
         }
 
         val shareButton = findViewById<TextView>(R.id.share_button)
