@@ -7,8 +7,10 @@ import android.view.View
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val searchButton = findViewById<View>(R.id.search_button)
 
         searchButton.setOnClickListener {
@@ -26,8 +28,7 @@ class MainActivity : AppCompatActivity() {
         val settingsButton = findViewById<View>(R.id.settings_button)
 
         settingsButton.setOnClickListener {
-            val libraryIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(libraryIntent)
-
+            val settingsIntent = Intent(this, SettingsActivity::class.java)
+            startActivity(settingsIntent)
     }
 }}
