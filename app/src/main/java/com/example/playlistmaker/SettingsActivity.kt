@@ -14,10 +14,8 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         val settingsBackButton = findViewById<View>(R.id.settings_back)
-
         settingsBackButton.setOnClickListener {
             finish()
-            //
         }
 
         val shareButton = findViewById<TextView>(R.id.share_button)

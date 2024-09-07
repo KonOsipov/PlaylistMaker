@@ -11,4 +11,6 @@
     <color name="main_background_color">#3772E7</color>
     <color name="tint">@color/white</color>
     <color name="switcher">#3772E7</color>
+    <color name="search_back">#FFFFFF</color>
+    <color name="search">#FF000000</color>
 </resources>
