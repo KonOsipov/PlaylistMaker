@@ -14,4 +14,6 @@
     <string name="clear_history">Очистить историю</string>
     <string name="refresh">Обновить</string>
     <string name="search_history_hint">Вы искали</string>
+    <string name="dev_email">konstantin1410@yandex.ru</string>
+    <string name="agreement_text">https://yandex.ru/legal/practicum_offer/</string>
 </resources>

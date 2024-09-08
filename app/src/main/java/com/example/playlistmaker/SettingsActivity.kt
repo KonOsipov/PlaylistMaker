@@ -32,9 +32,10 @@ class SettingsActivity : AppCompatActivity() {
         supportButton.setOnClickListener {
             val subject = getString(R.string.support_subject)
             val message = getString(R.string.support_message)
+            val devEmail = getString(R.string.dev_email)
             val supportIntent = Intent(Intent.ACTION_SENDTO)
             supportIntent.data = Uri.parse("mailto:")
-            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("konstantin1410@yandex.ru"))
+            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(devEmail))
             supportIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
             supportIntent.putExtra(Intent.EXTRA_TEXT, message)
             startActivity(supportIntent)
@@ -42,7 +43,8 @@ class SettingsActivity : AppCompatActivity() {
 
         val agreementButton = findViewById<TextView>(R.id.agreement_button)
         agreementButton.setOnClickListener {
-            val agreementIntent = Intent(Intent.ACTION_VIEW,Uri.parse("https://yandex.ru/legal/practicum_offer/"))
+            val agreementText=getString(R.string.agreement_text)
+            val agreementIntent = Intent(Intent.ACTION_VIEW,Uri.parse(agreementText))
             startActivity(agreementIntent)
         }
     }

@@ -19,10 +19,6 @@ class SearchActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.my_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        /*val searchBackButton = findViewById<View>(R.id.settings_back)
-        searchBackButton.setOnClickListener {
-            finish()
-        }*/
 
         val inputEditText = findViewById<EditText>(R.id.search)
         val cleanButton = findViewById<ImageView>(R.id.clean_icon)
@@ -61,8 +57,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val PRODUCT_AMOUNT = "TEXT"
-        const val AMOUNT_DEF = ""
+        private const val PRODUCT_AMOUNT = "TEXT"
+        private const val AMOUNT_DEF = ""
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
