@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background_color"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical"
     android:paddingHorizontal="16dp"
     android:paddingTop="14dp">
@@ -19,57 +19,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/main_background_color"
+        android:background="?attr/colorPrimary"
         android:orientation="vertical"
         android:paddingTop="40dp"
         android:paddingBottom="28dp">
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/main_button_layout_height"
-            android:layout_weight="@dimen/main_button_layout_weight"
-            android:textSize="@dimen/main_button_text_size"
-            app:cornerRadius="@dimen/main_button_cornerRadius"
-            app:iconPadding="@dimen/main_button_iconPadding"
-            android:backgroundTint="@color/white"
-            android:textAllCaps="false"
+            style="@style/MainButtons"
             android:text="@string/search"
-            android:textColor="@color/black"
             app:icon="@drawable/search"
-            app:iconGravity="textStart"
-            app:iconTint="@color/black"
             android:id="@+id/search_button"/>
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/main_button_layout_height"
-            android:layout_weight="@dimen/main_button_layout_weight"
-            android:textSize="@dimen/main_button_text_size"
-            app:cornerRadius="@dimen/main_button_cornerRadius"
-            app:iconPadding="@dimen/main_button_iconPadding"
-            android:backgroundTint="@color/white"
-            android:textAllCaps="false"
+            style="@style/MainButtons"
             android:text="@string/library"
-            android:textColor="@color/black"
             app:icon="@drawable/mediateka"
-            app:iconGravity="textStart"
-            app:iconTint="@color/black"
             android:id="@+id/library_button"/>
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/main_button_layout_height"
-            android:layout_weight="@dimen/main_button_layout_weight"
-            android:textSize="@dimen/main_button_text_size"
-            app:cornerRadius="@dimen/main_button_cornerRadius"
-            app:iconPadding="@dimen/main_button_iconPadding"
-            android:backgroundTint="@color/white"
-            android:textAllCaps="false"
+            style="@style/MainButtons"
             android:text="@string/settings"
-            android:textColor="@color/black"
             app:icon="@drawable/settings"
-            app:iconGravity="textStart"
-            app:iconTint="@color/black"
             android:id="@+id/settings_button"/>
 
     </LinearLayout>
