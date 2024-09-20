@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/error_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone"
+    tools:showIn="@layout/activity_search"
+    tools:visibility="visible">
+
+    <ImageView
+        android:id="@+id/search_image_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        tools:src="@drawable/no_internet_error">
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/search_text_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/ys_display_medium"
+        android:textAlignment="center"
+        android:textColor="?attr/colorError"
+        android:textSize="@dimen/error_text_size"
+        tools:text="@string/no_connection">
+
+    </TextView>
+
+
+    <Button
+        android:id="@+id/update_button"
+        style="Widget.MaterialComponents.Button.UnelevatedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/updateButtonBg"
+        android:text="@string/update"
+        android:textColor="@color/updateButtonText"
+        app:cornerRadius="@dimen/update_button_radius">
+
+    </Button>
+
+</LinearLayout>

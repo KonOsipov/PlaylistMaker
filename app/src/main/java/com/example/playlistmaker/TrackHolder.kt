@@ -1,6 +1,5 @@
 package com.example.playlistmaker
 
-import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -9,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.util.Locale
+import android.icu.text.SimpleDateFormat
 
 class TrackHolder(parent: ViewGroup) :
     RecyclerView.ViewHolder(
@@ -25,7 +25,7 @@ class TrackHolder(parent: ViewGroup) :
     fun bind(model: Track) {
         trackName.text = model.trackName
         musicianName.text = model.artistName
-        trackTiming.text = model.trackTime
+        trackTiming.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis?.toInt())
 
         val imageUrl = model.artworkUrl100
 

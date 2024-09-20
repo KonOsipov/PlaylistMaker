@@ -14,4 +14,7 @@
     <color name="search_back">#FFFFFF</color>
     <color name="search">#FF000000</color>
     <color name="bg">#1A1B22</color>
+    <color name="button_text_and_night_background">#FFFFFFFF</color>
+    <color name="updateButtonText">#1A1B22</color>
+    <color name="updateButtonBg">#FFFFFFFF</color>
 </resources>
