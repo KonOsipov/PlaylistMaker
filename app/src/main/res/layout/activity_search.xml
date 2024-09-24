@@ -47,7 +47,10 @@
             android:textColor="@color/black"
             android:textColorHint="?attr/colorOnSurface"
             android:textCursorDrawable="@drawable/cursor"
-            tools:ignore="labelFor" />
+            tools:ignore="labelFor"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            />
 
         <ImageView
             android:id="@+id/clean_icon"
@@ -63,6 +66,10 @@
 
     </FrameLayout>
 
+    <include
+        layout="@layout/error_layout"
+        tools:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -72,7 +79,6 @@
         android:orientation="vertical"
         tools:listitem="@layout/track"
         tools:itemCount="5"/>
-        />
 
 
 </LinearLayout>

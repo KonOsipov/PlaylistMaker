@@ -16,5 +16,7 @@
     <string name="search_history_hint">Вы искали</string>
     <string name="dev_email">konstantin1410@yandex.ru</string>
     <string name="agreement_text">https://yandex.ru/legal/practicum_offer/</string>
-
+    <string name="no_connection">Проблемы со связью\n\nЗагрузка не удалась. Проверьте \nподключение к интернету</string>
+    <string name="update">Обновить</string>
+    <string name="no_find_error">Ничего не нашлось</string>
 </resources>
