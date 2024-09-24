@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,9 +24,14 @@ import retrofit2.Response
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
 
     private val trackList = ArrayList<Track>()
+    private lateinit var sharedPreferences: SharedPreferences
+    private val HISTORY_KEY = "key"
+
+    private lateinit var searchHistory: SearchHistory
+    private var isHistoryShows: Boolean = true // показывается история треков или нет
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -42,26 +48,50 @@ class SearchActivity : AppCompatActivity() {
         val updateButton = findViewById<Button>(R.id.update_button)
         val searchErrorImage = findViewById<ImageView>(R.id.search_image_error)
         val searchErrorText = findViewById<TextView>(R.id.search_text_error)
+        val cleanHistoryButton = findViewById<Button>(R.id.clean_history_button)
+        val youSearchText = findViewById<TextView>(R.id.youSearch)
 
         val iTunesBaseUrl = "https://itunes.apple.com"
         val retrofit = Retrofit.Builder()
             .baseUrl(iTunesBaseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
         val iTunesService = retrofit.create(ITunesSearchApi::class.java)
 
 
-        val trackAdapter = TrackAdapter(trackList)
-
+        val trackAdapter = TrackAdapter(trackList, this)
+        sharedPreferences = getSharedPreferences(HISTORY_KEY, Context.MODE_PRIVATE)
+        searchHistory = SearchHistory(sharedPreferences)
 
         inputEditText.setText(countValue)
 
+        fun showSavedTracks() {
+            recyclerView.setItemViewCacheSize(searchHistory.getSaved().savedTracks.size)
+            recyclerView.adapter = TrackAdapter(searchHistory.getSaved().savedTracks, this)
+            cleanHistoryButton.visibility = View.VISIBLE
+            recyclerView.visibility = View.VISIBLE
+            youSearchText.visibility = View.VISIBLE
+            isHistoryShows = true
+        }
+
+        fun hideSavedTracks() {
+            //hintMessage.visibility = View.GONE
+            cleanHistoryButton.visibility = View.GONE
+            recyclerView.visibility = View.GONE
+            youSearchText.visibility = View.GONE
+        }
+
+
+        //----input listener
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                if (inputEditText.hasFocus() && s?.isEmpty() == true && true
+                ) showSavedTracks() else hideSavedTracks()
+                searchHistory.getSaved().savedTracks.isNotEmpty()
                 cleanButton.visibility = cleanButtonVisibility(s)
                 countValue = s.toString()
             }
@@ -70,12 +100,23 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
+        ///////
+
+        ////-----focus listener
+        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getSaved().savedTracks
+                    .isNotEmpty()
+            ) showSavedTracks() else hideSavedTracks()
+        }
 
         fun hideAll() {
 
             recyclerView.visibility = View.GONE
             errorLayout.visibility = View.GONE
             updateButton.visibility = View.GONE
+            youSearchText.visibility = View.GONE
+            cleanHistoryButton.visibility = View.GONE
+
         }
 
 
@@ -100,8 +141,7 @@ class SearchActivity : AppCompatActivity() {
 
 
         fun tracksRequest() {
-
-
+            isHistoryShows = false
             if (inputEditText.text.isNotEmpty()) {
                 hideAll()
                 iTunesService.search(inputEditText.text.toString())
@@ -147,16 +187,35 @@ class SearchActivity : AppCompatActivity() {
             }
             false
         }
+
         updateButton.setOnClickListener {
             tracksRequest()
         }
+
         cleanButton.setOnClickListener {
             inputEditText.setText("")
+            inputEditText.clearFocus()
+
+            trackList.clear()
             hideAll()
+            //hideSavedTracks()
+            if (searchHistory.getSaved().savedTracks
+                    .isNotEmpty()
+            ) {
+                showSavedTracks()
+            }
+
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
         }
+
+        cleanHistoryButton.setOnClickListener {
+            searchHistory.clean()
+            hideSavedTracks()
+        }
+
+
     }
 
     private var countValue: String = AMOUNT_DEF
@@ -189,5 +248,11 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onClickTrackHolder(track: Track) {
 
-}
+        if (!isHistoryShows) {
+            searchHistory.addTrackToHistory(track)
+        }
+
+
+    }}

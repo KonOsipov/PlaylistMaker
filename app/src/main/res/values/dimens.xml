@@ -25,4 +25,5 @@
     <dimen name="margin_top">24dp</dimen>
     <dimen name="error_text_size">19sp</dimen>
     <dimen name="update_button_radius">54dp</dimen>
+    <dimen name="margin_search_top">54dp</dimen>
 </resources>

@@ -17,5 +17,6 @@
     <item name="colorOnSurfaceVariant">@color/search_back</item>
 
     <item name="colorError">@color/button_text_and_night_background</item>
+    <item name="trackColor">@color/switch_back_night</item>
 </style>
 </resources>

@@ -32,13 +32,13 @@
 
     </LinearLayout>
 
-    <androidx.appcompat.widget.SwitchCompat
-
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/themeSwitcher"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_button_height"
         android:layout_marginTop="40dp"
         android:backgroundTint="@color/white"
+        android:buttonTint="@color/white"
         android:fontFamily="@font/ys_display_regular"
         android:letterSpacing="0"
         android:paddingStart="@dimen/settings_padding_start"
@@ -48,8 +48,8 @@
         android:textAllCaps="false"
         android:textColor="?attr/colorOnPrimary"
         android:textSize="@dimen/settings_text_size"
-        android:thumbTint="@color/switcher"
-        android:trackTint="@color/switcher" />
+        android:thumbTint="@color/settings_icon_night"
+        android:trackTint="@color/switch_back_night" />
 
     <TextView
         android:id="@+id/share_button"
