@@ -82,7 +82,7 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
         }
 
 
-        //----input listener
+        ///----input listener
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
