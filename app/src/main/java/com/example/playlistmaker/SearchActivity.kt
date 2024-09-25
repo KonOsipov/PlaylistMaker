@@ -28,10 +28,12 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
 
     private val trackList = ArrayList<Track>()
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
     private val HISTORY_KEY = "key"
 
     private lateinit var searchHistory: SearchHistory
     private var isHistoryShows: Boolean = true // показывается история треков или нет
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -61,6 +63,7 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
 
         val trackAdapter = TrackAdapter(trackList, this)
         sharedPreferences = getSharedPreferences(HISTORY_KEY, Context.MODE_PRIVATE)
+
         searchHistory = SearchHistory(sharedPreferences)
 
         inputEditText.setText(countValue)
@@ -179,7 +182,17 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
 
 
         }
+///////////////
+        listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if (key == HISTORY_KEY&&isHistoryShows) {
 
+                Log.d("myTag","history changed")
+                recyclerView.adapter = TrackAdapter(searchHistory.getSaved().savedTracks, this)
+
+            }
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+/////////////////////
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {

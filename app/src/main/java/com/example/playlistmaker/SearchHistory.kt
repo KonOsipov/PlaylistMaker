@@ -11,11 +11,6 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
 
     private var savedTracks = mutableListOf<Track>()
 
-    fun traceSharPref()//тест
-    {
-        Log.d("myTag", "шары" + " " + sharedPreferences.toString())
-    }
-
     fun getSaved(): SharedPrefsHistory {
 
         val json =
