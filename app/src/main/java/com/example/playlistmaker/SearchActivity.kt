@@ -250,9 +250,10 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
 
     override fun onClickTrackHolder(track: Track) {
 
-        if (!isHistoryShows) {
-            searchHistory.addTrackToHistory(track)
-        }
+        //if (!isHistoryShows) {
+            //searchHistory.addTrackToHistory(track)
+        //}
+        searchHistory.addTrackToHistory(track)
 
 
     }}
