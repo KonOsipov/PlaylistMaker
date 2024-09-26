@@ -22,7 +22,7 @@ class TrackHolder(parent: ViewGroup) :
     private val trackTiming: TextView = itemView.findViewById(R.id.track_timing)
 
 
-    fun bind(model: Track) {
+    fun bind(model: Track, listener: Listener) {
         trackName.text = model.trackName
         musicianName.text = model.artistName
         trackTiming.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis?.toInt())
@@ -34,6 +34,13 @@ class TrackHolder(parent: ViewGroup) :
             .transform(RoundedCorners(10))
             .placeholder(R.drawable.placeholder)
             .into(trackIcon)
+
+        itemView.setOnClickListener {
+            listener.onClickTrackHolder(model)
+        }
+    }
+    interface Listener {
+        fun onClickTrackHolder(track: Track)
     }
 
 

@@ -68,17 +68,11 @@
 
     <include
         layout="@layout/error_layout"
-        tools:visibility="gone" />
+        tools:visibility="gone"
+        />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"
-        tools:listitem="@layout/track"
-        tools:itemCount="5"/>
-
+    <include
+        layout="@layout/track_list"
+        />
 
 </LinearLayout>

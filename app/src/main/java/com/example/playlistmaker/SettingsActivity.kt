@@ -1,12 +1,14 @@
 package com.example.playlistmaker
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 //import android.widget.Button
 import android.widget.TextView
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,6 +18,18 @@ class SettingsActivity : AppCompatActivity() {
         val settingsBackButton = findViewById<View>(R.id.settings_back)
         settingsBackButton.setOnClickListener {
             finish()
+        }
+
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+
+        //установка свитчера в соответчиии с темой
+        when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_YES -> themeSwitcher.toggle()
+        }
+        ////
+
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
 
         val shareButton = findViewById<TextView>(R.id.share_button)
