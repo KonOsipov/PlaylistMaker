@@ -19,4 +19,8 @@
     <color name="button_text_and_night_background">#1A1B22</color>
     <color name="updateButtonText">#FFFFFFFF</color>
     <color name="updateButtonBg">#1A1B22</color>
+    <color name="switch_back_night">#9FBBF3</color>
+    <color name="settings_icon">#AEAFB4</color>
+    <color name="settings_icon_night">#3772E7</color>
+    <color name="gray_button">#535459</color>
 </resources>
