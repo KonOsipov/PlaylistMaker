@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.res.Resources
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
@@ -36,6 +37,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var track: Track
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
