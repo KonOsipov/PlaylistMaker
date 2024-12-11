@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -15,6 +17,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -31,7 +34,8 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
     private val HISTORY_KEY = "key"
-
+    private val handler = Handler(Looper.getMainLooper())
+    private var isClickAllowed = true
     private lateinit var searchHistory: SearchHistory
     private var isHistoryShows: Boolean = true // показывается история треков или нет
 
@@ -53,6 +57,7 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
         val searchErrorText = findViewById<TextView>(R.id.search_text_error)
         val cleanHistoryButton = findViewById<Button>(R.id.clean_history_button)
         val youSearchText = findViewById<TextView>(R.id.youSearch)
+        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
 
         val iTunesBaseUrl = "https://itunes.apple.com"
         val retrofit = Retrofit.Builder()
@@ -85,34 +90,6 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
             youSearchText.visibility = View.GONE
         }
 
-
-        ///----input listener
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-                if (inputEditText.hasFocus() && s?.isEmpty() == true && true
-                ) showSavedTracks() else hideSavedTracks()
-                searchHistory.getSaved().savedTracks.isNotEmpty()
-                cleanButton.visibility = cleanButtonVisibility(s)
-                countValue = s.toString()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        }
-        inputEditText.addTextChangedListener(simpleTextWatcher)
-        ///////
-
-        ////-----focus listener
-        inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getSaved().savedTracks
-                    .isNotEmpty()
-            ) showSavedTracks() else hideSavedTracks()
-        }
-
         fun hideAll() {
 
             recyclerView.visibility = View.GONE
@@ -123,7 +100,6 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
 
         }
 
-
         fun showConnectionError() {
 
             trackList.clear()
@@ -132,6 +108,7 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
             searchErrorImage.setImageResource(R.drawable.no_internet_error)
             searchErrorText.setText(R.string.no_connection)
             updateButton.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
         }
 
         fun showNoResults() {
@@ -141,13 +118,15 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
             searchErrorText.setText(R.string.no_find_error)
             errorLayout.visibility = View.VISIBLE
             updateButton.visibility = View.GONE
+            progressBar.visibility = View.GONE
         }
 
-
         fun tracksRequest() {
+
             isHistoryShows = false
             if (inputEditText.text.isNotEmpty()) {
                 hideAll()
+                progressBar.visibility = View.VISIBLE
                 iTunesService.search(inputEditText.text.toString())
                     .enqueue(object : Callback<TrackResponse> {
                         override fun onResponse(
@@ -156,6 +135,7 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
                         ) {
                             if (response.code() == 200) {
                                 trackList.clear()
+                                progressBar.visibility = View.GONE
                                 if (response.body()?.results?.isNotEmpty() == true) {
                                     errorLayout.visibility = View.GONE
                                     trackList.addAll(response.body()?.results!!)
@@ -183,17 +163,40 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
 
 
         }
-///////////////
+        val searchRunnable = Runnable { tracksRequest() }
+
+        fun searchDebounce() {
+            handler.removeCallbacks(searchRunnable)
+            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        }
+        val simpleTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                if (inputEditText.hasFocus() && s?.isEmpty() == true && true
+                ) showSavedTracks() else hideSavedTracks()
+                searchHistory.getSaved().savedTracks.isNotEmpty()
+                cleanButton.visibility = cleanButtonVisibility(s)
+                countValue = s.toString()
+                searchDebounce()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        }
+        inputEditText.addTextChangedListener(simpleTextWatcher)
+
         listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
             if (key == HISTORY_KEY&&isHistoryShows) {
 
-                Log.d("myTag","history changed")
+                //Log.d("myTag","history changed")
                 recyclerView.adapter = TrackAdapter(searchHistory.getSaved().savedTracks, this)
 
             }
         }
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
-/////////////////////
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -212,7 +215,6 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
 
             trackList.clear()
             hideAll()
-            //hideSavedTracks()
             if (searchHistory.getSaved().savedTracks
                     .isNotEmpty()
             ) {
@@ -228,6 +230,12 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
             searchHistory.clean()
             hideSavedTracks()
         }
+        ////-----focus listener
+        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getSaved().savedTracks
+                    .isNotEmpty()
+            ) showSavedTracks() else hideSavedTracks()
+        }
 
 
     }
@@ -242,6 +250,8 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
     companion object {
         private const val PRODUCT_AMOUNT = "TEXT"
         private const val AMOUNT_DEF = ""
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -262,12 +272,21 @@ class SearchActivity : AppCompatActivity(), TrackHolder.Listener {
         }
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
     override fun onClickTrackHolder(track: Track) {
-
-        //searchHistory.addTrackToHistory(track)
-        val displayIntent = Intent(this, PlayerActivity::class.java)
-        displayIntent.putExtra("track", track)
-        startActivity(displayIntent)
+        searchHistory.addTrackToHistory(track)
+        if (clickDebounce()) {
+            val displayIntent = Intent(this, PlayerActivity::class.java)
+            displayIntent.putExtra("track", track)
+            startActivity(displayIntent)
+        }
 
 
     }}
