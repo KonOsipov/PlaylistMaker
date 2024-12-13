@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.tracklist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,6 +9,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.util.Locale
 import android.icu.text.SimpleDateFormat
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Track
 
 class TrackHolder(parent: ViewGroup) :
     RecyclerView.ViewHolder(

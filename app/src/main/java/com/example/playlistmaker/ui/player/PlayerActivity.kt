@@ -1,17 +1,17 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.player
 
-import android.content.res.Resources
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -28,7 +28,6 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private var mediaPlayer = MediaPlayer()
-
     private lateinit var playButton: ImageView
     private var mainThreadHandler: Handler? = null
     private var actualTime: TextView? = null
@@ -62,7 +61,7 @@ class PlayerActivity : AppCompatActivity() {
 
         playButton = findViewById(R.id.play_button)
         actualTime = findViewById(R.id.actual_time)
-        actualTime?.text = "00:00"
+        actualTime?.text = getString(R.string._00_00)
 
         mainThreadHandler = Handler(Looper.getMainLooper())
 
@@ -93,7 +92,6 @@ class PlayerActivity : AppCompatActivity() {
         val secondPlayerStats = playerState
         if (playerState == STATE_PAUSED) pauseTimer()
         pausePlayer()
-        playerState = secondPlayerStats
     }
 
     override fun onDestroy() {
@@ -150,7 +148,7 @@ class PlayerActivity : AppCompatActivity() {
             playerState = STATE_PREPARED
             playButton.setImageResource(R.drawable.play_button)
             mainThreadHandler?.removeCallbacksAndMessages(null)
-            actualTime?.text = "00:00"
+            actualTime?.text = getString(R.string._00_00)
         }
     }
 

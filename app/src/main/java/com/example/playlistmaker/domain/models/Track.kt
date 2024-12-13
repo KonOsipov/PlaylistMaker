@@ -15,7 +15,7 @@ data class Track(val trackName: String,
 {
 
 }*/
-package com.example.playlistmaker
+package com.example.playlistmaker.domain.models
 
 import android.os.Parcel
 import android.os.Parcelable
