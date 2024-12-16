@@ -1,17 +1,21 @@
 package com.example.playlistmaker.creator
 
 import android.content.SharedPreferences
+import com.example.playlistmaker.data.network.MediaPlayerRepositoryImpl
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.network.TrackRepositoryImpl
 import com.example.playlistmaker.data.sharedPref.SettingsManager
 import com.example.playlistmaker.data.sharedPref.SettingsSharedPrefsImpl
 import com.example.playlistmaker.data.sharedPref.SharedPrefsManager
 import com.example.playlistmaker.data.sharedPref.TrackSharedPrefsImpl
+import com.example.playlistmaker.domain.api.PlayerInteractor
+import com.example.playlistmaker.domain.api.PlayerRepository
 import com.example.playlistmaker.domain.api.SettingsInteractor
 import com.example.playlistmaker.domain.api.SettingsSharedPref
 import com.example.playlistmaker.domain.api.TrackRepository
 import com.example.playlistmaker.domain.api.TrackSharedPref
 import com.example.playlistmaker.domain.api.TracksInteractor
+import com.example.playlistmaker.domain.impl.MediaPlayerInteractorImpl
 import com.example.playlistmaker.domain.impl.SettingsInteractorImpl
 import com.example.playlistmaker.domain.impl.TrackInteractorImpl
 
@@ -34,6 +38,14 @@ object Creator {
 
     fun provideSettingsInteractor(sharedPreferences: SharedPreferences): SettingsInteractor {
         return SettingsInteractorImpl(getSettingsSharedPrefs(sharedPreferences))
+    }
+
+    private fun getMediaPlayerRepository(): PlayerRepository {
+        return MediaPlayerRepositoryImpl()
+    }
+
+    fun provideMediaPlayaerInteractor(): PlayerInteractor {
+        return MediaPlayerInteractorImpl(getMediaPlayerRepository())
     }
 
 }

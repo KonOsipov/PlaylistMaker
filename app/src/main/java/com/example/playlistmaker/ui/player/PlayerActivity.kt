@@ -1,44 +1,43 @@
 package com.example.playlistmaker.ui.player
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
+import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.domain.api.PlayerInteractor
+import com.example.playlistmaker.domain.models.PlayerState
 import com.example.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-
 class PlayerActivity : AppCompatActivity() {
 
     companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-        private const val DELAY = 500L
+        private const val ZERO_TIMER = "00:00"
+        private const val TIMER_DELAY = 400L
     }
 
-    private var mediaPlayer = MediaPlayer()
     private lateinit var playButton: ImageView
-    private var mainThreadHandler: Handler? = null
+    private var mainThreadHandler: Handler = Handler(Looper.getMainLooper())
     private var actualTime: TextView? = null
-    private var playerState = STATE_DEFAULT
 
     private lateinit var track: Track
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
+    private val playerInteractor = Creator.provideMediaPlayaerInteractor()
+    private var timerRunnable: Runnable? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
@@ -63,7 +62,6 @@ class PlayerActivity : AppCompatActivity() {
         actualTime = findViewById(R.id.actual_time)
         actualTime?.text = getString(R.string._00_00)
 
-        mainThreadHandler = Handler(Looper.getMainLooper())
 
         trackName.text = track.trackName
         musicianName.text = track.artistName
@@ -79,97 +77,91 @@ class PlayerActivity : AppCompatActivity() {
             .placeholder(R.drawable.placeholder)
             .into(trackIcon)
 
-        if (url != null) {
-            preparePlayer(url)
-        }
+        preparePlayer()
 
         playButton.setOnClickListener {
-            playbackControl()
+            when (playerInteractor.getPlayerState()) {
+                PlayerState.PREPARED, PlayerState.PAUSED -> playerInteractor.start()
+                PlayerState.PLAYING -> playerInteractor.pause()
+                PlayerState.DEFAULT -> {}
+            }
+        }
+
+    }
+
+    private fun preparePlayer() {
+        playerInteractor.setPlayerDataSource(track)
+        playerInteractor.prepare(
+            listener = object : PlayerInteractor.OnStateChangeListener {
+                override fun onChange(state: PlayerState) {
+                    when (state) {
+                        PlayerState.PREPARED -> {
+                            playButton.isEnabled = true
+                            playButton.setImageResource(R.drawable.play_button)
+                            manageTimer()
+                        }
+
+                        PlayerState.PLAYING -> {
+                            playButton.setImageResource(R.drawable.pause)
+                            manageTimer()
+                        }
+
+                        PlayerState.PAUSED -> {
+                            playButton.setImageResource(R.drawable.play_button)
+                            manageTimer()
+                        }
+
+                        PlayerState.DEFAULT -> {
+                            playButton.isEnabled = false
+                            playButton.setImageResource(R.drawable.play_button)
+                            manageTimer()
+                        }
+                    }
+                }
+            }
+        )
+    }
+
+    private fun manageTimer() {
+        manageTimerByPlayerState(playerInteractor.getPlayerState())
+    }
+
+    private fun manageTimerByPlayerState(state: PlayerState) {
+        when (state) {
+            PlayerState.DEFAULT, PlayerState.PREPARED -> {
+                mainThreadHandler.removeCallbacksAndMessages(null)
+                actualTime?.text = ZERO_TIMER
+            }
+
+            PlayerState.PLAYING -> {
+                val runnable = object : Runnable {
+                    override fun run() {
+                        actualTime?.text = playerInteractor.getPlayerCurrentTimerPosition()
+                        mainThreadHandler.postDelayed(this, TIMER_DELAY)
+                    }
+                }
+
+                mainThreadHandler.postDelayed(runnable, TIMER_DELAY)
+                timerRunnable = runnable
+            }
+
+            PlayerState.PAUSED -> timerRunnable?.let {
+                mainThreadHandler.removeCallbacksAndMessages(
+                    timerRunnable
+                )
+            }
         }
     }
+
     override fun onPause() {
         super.onPause()
-        val secondPlayerStats = playerState
-        if (playerState == STATE_PAUSED) pauseTimer()
-        pausePlayer()
+        playerInteractor.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
-        mainThreadHandler?.removeCallbacksAndMessages(null)
+        playerInteractor.release()
+        manageTimer()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun startPlayer() {
-        mediaPlayer.start()
-        playButton.setImageResource(R.drawable.pause)
-        playerState = STATE_PLAYING
-    }
-
-    private fun pausePlayer() {
-        mediaPlayer.pause()
-        playButton.setImageResource(R.drawable.play_button)
-        playerState = STATE_PAUSED
-
-    }
-
-    private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-                pauseTimer()
-            }
-
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-                startTimer()
-            }
-        }
-    }
-
-    private fun preparePlayer(url: String) {
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-
-            playerState = STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
-            playerState = STATE_PREPARED
-            playButton.setImageResource(R.drawable.play_button)
-            mainThreadHandler?.removeCallbacksAndMessages(null)
-            actualTime?.text = getString(R.string._00_00)
-        }
-    }
-
-    private fun startTimer() {
-        mainThreadHandler?.post(
-            createUpdateTimerTask()
-        )
-    }
-
-    private fun pauseTimer() {
-        actualTime?.text = dateFormat.format(mediaPlayer.currentPosition)
-        mainThreadHandler?.removeCallbacksAndMessages(null)
-    }
-
-    private fun createUpdateTimerTask(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                actualTime?.text = dateFormat.format(mediaPlayer.currentPosition)
-                mainThreadHandler?.postDelayed(this, DELAY)
-            }
-        }
-
-    }
 }
